@@ -39,9 +39,6 @@ class ChangeCurrencyServiceImplTest {
         ResponseChange calculate = service.calculateChange(change, origin, target, amountToChange);
         Assertions.assertEquals(1.0, calculate.getAmount());
         Assertions.assertEquals(1.0*change.getChangeType(), calculate.getAmountWithChange());
-        Assertions.assertEquals(origin.getName(), calculate.getOriginCurrency());
-        Assertions.assertEquals(target.getName(), calculate.getDestinationCurrency());
-        Assertions.assertEquals(change.getChangeType(), calculate.getChangeType());
     }
 
     private Change getChange() {
