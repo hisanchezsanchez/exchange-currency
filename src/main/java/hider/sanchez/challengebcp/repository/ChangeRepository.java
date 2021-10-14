@@ -10,6 +10,6 @@ import java.util.Optional;
 
 @Repository
 public interface ChangeRepository extends JpaRepository<Change, Integer> {
-    Optional<Change> findOneByOrigenCurrencyIdAndDestinationCurrencyId(Integer origenCurrencyId, Integer destinationCurrencyId);
+    Optional<Change> findOneByCurrencyCode(String currencyCode);
 
 }

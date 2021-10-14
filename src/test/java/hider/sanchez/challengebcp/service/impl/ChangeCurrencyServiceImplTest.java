@@ -47,11 +47,8 @@ class ChangeCurrencyServiceImplTest {
     private Change getChange() {
         Change change = new Change();
         change.setChangeId(111);
-        change.setActive(true);
         change.setDate(new Date());
         change.setChangeType(4.004D);
-        change.setDestinationCurrencyId(CHANGE_PEN_ID);
-        change.setOrigenCurrencyId(CHANGE_USD_ID);
         return change;
     }
 
