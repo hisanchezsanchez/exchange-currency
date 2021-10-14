@@ -16,6 +16,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -33,10 +35,8 @@ public class ChangeCurrencyServiceImpl implements ChangeCurrencyService {
 
     @Override
     public ResponseChange change(RequestChange request) throws NotFoundCurrency, NotFoundChange {
-        val originCurrencyCode = request.getOriginCurrency();
-        val targetCurrencyCode = request.getDestinationCurrency();
-        val originCurrency = getCurrency(originCurrencyCode);
-        val targetCurrency = getCurrency(targetCurrencyCode);
+        val originCurrency = getCurrency(request.getOriginCurrency());
+        val targetCurrency = getCurrency(request.getDestinationCurrency());
         val change = getChangeActive(originCurrency, targetCurrency);
         return calculateChange(change, originCurrency, targetCurrency, request.getAmount());
     }
@@ -54,6 +54,7 @@ public class ChangeCurrencyServiceImpl implements ChangeCurrencyService {
             newChange.setCurrencyCode(it.getCode());
             newChange.setChangeType(it.getAmount());
             val change = changeRepository.findOneByCurrencyCode(it.getCode()).orElse(newChange);
+            change.setChangeType(it.getAmount());
             changeRepository.save(change);
             currencyRepo.save(currency);
         });
@@ -69,7 +70,7 @@ public class ChangeCurrencyServiceImpl implements ChangeCurrencyService {
     }
 
     private Change getChangeActive(Currency origin, Currency target) throws NotFoundChange {
-        return changeRepository.findOneByCurrencyCode(target.getCode()).orElseThrow(() -> new NotFoundChange(origin.getCode(), target.getCode()));
+        return changeRepository.findOneByCurrencyCode(origin.getCode()).orElseThrow(() -> new NotFoundChange(origin.getCode(), target.getCode()));
     }
 
     private Currency getCurrency(String currencyCode) throws NotFoundCurrency {

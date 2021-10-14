@@ -3,13 +3,13 @@
 ## From [docker hub](https://hub.docker.com/repository/docker/srhit/exchange-currency)
 
 ````shell
-docker container run --rm -it -p 8080:8080 srhit/exchange-currency:1.0
+docker container run --rm -it -p 80:8080 srhit/exchange-currency:1.1
 ````
 
 ### calculate change with curl (or import to postman)
 
 ````shell
-curl --location --request POST 'localhost:8080/exchange/v1/calculate' \
+curl --location --request POST 'http://localhost/exchange/v1/calculate' \
 --header 'Content-Type: application/json' \
 --data-raw '{
   "amount": 10,
@@ -21,7 +21,7 @@ curl --location --request POST 'localhost:8080/exchange/v1/calculate' \
 ### upload massive update or create change types
 
 ````shell
-curl --request POST 'localhost:8080/currency/v1/update' \
+curl --request POST 'http://localhost/currency/v1/update' \
 --header 'Content-Type: application/json' \
 --data-raw '[
   {"code": "USD","amount": 4.21},
@@ -63,7 +63,7 @@ mvn clean package
 ### Run java jar
 
 ````shell
-java -jar target/exchange-currency-1.0.jar
+java -jar target/exchange-currency-0.2.jar
 ````
 
 ejecuta los curl
@@ -71,7 +71,7 @@ ejecuta los curl
 # Docker build file
 
 ````shell
-mvn clean package ; docker image build -t srhit/exchange-currency:1.0  .
+mvn clean package ; docker image build -t srhit/exchange-currency:1.1  .
 ````
 
 # Run in docker container with interactive console
