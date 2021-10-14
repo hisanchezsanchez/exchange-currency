@@ -9,5 +9,5 @@ import java.util.Optional;
 
 @Repository
 public interface CurrencyRepository extends JpaRepository<Currency, Integer> {
-    Optional<Currency> findOneByCode( @NotNull String code);
+    Optional<Currency> findOneByCode(@NotNull String code);
 }

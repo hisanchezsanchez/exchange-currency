@@ -35,10 +35,10 @@ class ChangeCurrencyServiceImplTest {
 
         Currency origin = getCurrencyUsd();
         Currency target = getCurrencyPen();
-        Double amountToChange=1.0D;
+        Double amountToChange = 1.0D;
         ResponseChange calculate = service.calculateChange(change, origin, target, amountToChange);
         Assertions.assertEquals(1.0, calculate.getAmount());
-        Assertions.assertEquals(1.0*change.getChangeType(), calculate.getAmountWithChange());
+        Assertions.assertEquals(1.0 * change.getChangeType(), calculate.getAmountWithChange());
     }
 
     private Change getChange() {

@@ -1,5 +1,4 @@
-FROM adoptopenjdk/openjdk11:latest
-RUN mkdir /opt/app
-COPY target/*.jar /opt/app/app.jar
+FROM openjdk:11.0.6-jre-buster
+COPY target/*.jar app.jar
 EXPOSE 8080
-CMD ["java", "-jar", "/opt/app/app.jar"]
+ENTRYPOINT ["java","-jar","app.jar"]
