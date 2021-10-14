@@ -1,4 +1,7 @@
-# Run Code in local
+# Repositorio ejercicio  [n numeros primos](https://github.com/hisanchezsanchez/n-numeros-primos)
+
+#Exchange Currency
+## Run Code in local
 
 ## From [docker hub](https://hub.docker.com/repository/docker/srhit/exchange-currency)
 
