@@ -1,11 +1,7 @@
-
-options {
-    timestamps()
-    disableConcurrentBuilds()
-    skipDefaultCheckout(true)
-}
-
 stages {
+    stage{
+        sh "mvn --version"
+    }
     stage('Limpiar Workspace') {
         steps {
             cleanWs()
@@ -21,7 +17,7 @@ stages {
     stage('Build') {
         steps {
             script {
-                sh "mvn clean compile -P${AMBIENTE}"
+                sh "mvn clean compile"
             }
         }
     }
@@ -30,7 +26,7 @@ stages {
         steps {
             script {
                 try {
-                    sh "mvn test -P${AMBIENTE}"
+                    sh "mvn test"
                 } finally {
                     junit '**/target/surefire-reports/*.xml'
                 }
@@ -41,7 +37,7 @@ stages {
     stage('Package') {
         steps {
             script {
-                sh "mvn package -DskipTests -P${AMBIENTE}"
+                sh "mvn package -DskipTests"
                 archiveArtifacts artifacts: 'target/*.jar', fingerprint: true
             }
         }
