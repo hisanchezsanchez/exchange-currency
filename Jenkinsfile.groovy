@@ -1,7 +1,3 @@
-tools {
-    jdk 'JDK21'
-    maven 'Maven'
-}
 
 options {
     timestamps()
