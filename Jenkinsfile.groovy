@@ -1,68 +1,65 @@
-pipeline {
-    agent any
+tools {
+    jdk 'JDK21'
+    maven 'Maven'
+}
 
-    tools {
-        jdk 'OpenJDK 11'  // Asegúrate de que 'OpenJDK 11' esté configurado correctamente en Jenkins
-        maven 'Maven 3.8.1'  // Asegúrate de que 'Maven 3.8.1' esté configurado correctamente en Jenkins
+options {
+    timestamps()
+    disableConcurrentBuilds()
+    skipDefaultCheckout(true)
+}
+
+stages {
+    stage('Limpiar Workspace') {
+        steps {
+            cleanWs()
+        }
     }
 
-    stages {
-        stage('Checkout') {
-            steps {
-                // Extrae el código desde tu repositorio de Git
-                git 'https://github.com/usuario/tu-repositorio.git'
-            }
+    stage('Checkout') {
+        steps {
+            checkout scm
         }
+    }
 
-        stage('Build') {
-            steps {
-                script {
-                    // Ejecutar el comando de Maven para compilar el proyecto
-                    sh 'mvn clean compile'
-                }
-            }
-        }
-
-        stage('Test') {
-            steps {
-                script {
-                    // Ejecutar los tests JUnit usando Maven
-                    sh 'mvn test'
-                }
-            }
-        }
-
-        stage('Package') {
-            steps {
-                script {
-                    // Empaquetar el proyecto y generar el archivo .jar
-                    sh 'mvn package'
-                }
-            }
-        }
-
-        stage('Archive') {
-            steps {
-                // Archivar el archivo .jar generado
-                archiveArtifacts artifacts: 'target/*.jar', allowEmptyArchive: true
+    stage('Build') {
+        steps {
+            script {
+                sh "mvn clean compile -P${AMBIENTE}"
             }
         }
     }
 
-    post {
-        always {
-            // Esto se ejecutará después de la ejecución de todos los stages (para limpiar, notificar, etc.)
-            echo 'Pipeline completed!'
+    stage('Test') {
+        steps {
+            script {
+                try {
+                    sh "mvn test -P${AMBIENTE}"
+                } finally {
+                    junit '**/target/surefire-reports/*.xml'
+                }
+            }
         }
+    }
 
-        success {
-            // Este bloque se ejecuta si el pipeline fue exitoso
-            echo 'Build was successful!'
+    stage('Package') {
+        steps {
+            script {
+                sh "mvn package -DskipTests -P${AMBIENTE}"
+                archiveArtifacts artifacts: 'target/*.jar', fingerprint: true
+            }
         }
+    }
+}
 
-        failure {
-            // Este bloque se ejecuta si el pipeline falló
-            echo 'Build failed!'
-        }
+post {
+    always {
+        cleanWs()
+    }
+    success {
+        echo "Build completado exitosamente para ambiente: ${AMBIENTE}"
+    }
+    failure {
+        echo "Build falló para ambiente: ${AMBIENTE}"
     }
 }
